@@ -12,8 +12,22 @@ import java.util.Map;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-   @GetMapping
-    public String helloWorld(){
-       return "Hello World!";
+
+    Map<String, String> users = new HashMap<>();
+
+   @GetMapping()
+    public Map<String, String> getAllUsers(){
+       buildUsers();
+       return users;
    }
+
+    @GetMapping("hello-world")
+    public String helloWorld(){
+        return "Hello World!";
+    }
+
+    private void buildUsers() {
+        users.put("Andrey", "Hey!");
+        users.put("Oksana", "How are you?");
+    }
 }
