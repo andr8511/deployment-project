@@ -18,8 +18,17 @@ public class NaumController {
         try {
             // Получаем имя хоста (название устройства)
             String hostName = InetAddress.getLocalHost().getHostName();
+
             // Получаем IP адрес устройства
-            String ipAddress = request.getRemoteAddr();
+            String ipAddress = request.getHeader("X-Forwarded-For");
+
+            // Если заголовок пустой, используем метод по умолчанию
+            if (ipAddress == null || ipAddress.isEmpty()) {
+                ipAddress = request.getRemoteAddr();
+            } else {
+                // Если есть несколько IP, берем первый
+                ipAddress = ipAddress.split(",")[0].trim();
+            }
 
             model.addAttribute("hostName", hostName);
             model.addAttribute("ipAddress", ipAddress);
@@ -27,6 +36,8 @@ public class NaumController {
             model.addAttribute("hostName", "Не удалось получить имя устройства");
             model.addAttribute("ipAddress", "Не удалось получить IP адрес");
         }
+
         return "index";
     }
+
 }
